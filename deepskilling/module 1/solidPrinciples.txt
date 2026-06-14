@@ -1,0 +1,136 @@
+
+
+Solid principles :
+for better understanding,Easy - to Maintain , reusable code .
+
+SOLID referes to 5 main principles:
+S - single responsibility principle
+O - Open / Closed Principle 
+L - Liskov substitutions
+I - Interface segregation 
+D - Dependency Inversion
+
+
+Single Responsibility :
+ Responsiblity of a class should be only a single job
+
+ Public class book{
+     void selectBook(){
+          //this function selects books
+
+     }
+
+ }
+ Public class printBook{
+     void print(){
+          // this function prints the book
+     }
+ }
+
+Note : each class performs only single operation this ensures 
+Testing : fewwr test cases are needed for each class
+Low Coupling: there will be less dependency between the methods inside the class
+
+
+Open-Closed Principle:
+Program should be open for Extensions and closed for modifications 
+this helps us to make fewer modifications reduces more bugs caused in the class 
+
+example code:
+public class guitar{
+     private String make;
+     private String model;
+     private String volume;
+}
+
+now making a simple gitar is boring so i decided to add one more flame type 
+
+public class flameGuitar extends guitar{
+     private String flame;
+}
+
+
+Liskov substituitions:
+
+a child class should be able to replace with its parent class without causing any problems
+
+interface car{
+     void turnOnEngine();
+     void Accelerate();
+
+}
+class motorcar impplements car {
+     private Engine engine;
+     public void turnOnEngine(){
+          engine.on;
+     }
+     public void accelerate(){
+          engine.poweOn(1000);
+     }
+}
+
+
+class electriccar implements car{
+     private void engine(){
+          throw new AssertionError("I dont have car");
+     }
+     private void accelerate(){
+
+     }
+}
+
+
+electric car  cannot perform operations for motor car so throw error 
+
+
+interface segregation:
+large interfaces are spli into smaller interfaces we can ensure that implementing classes only need to be concerned  about that are needed 
+public interface beartaker{
+     void bathbear();
+     void feedbear();
+     void petbear();
+}
+petting bear is a dangereous so deviding what is needed only 
+
+public interface bathbear{
+     void bathbear();
+}
+public interface feedbear{
+     void feedbear();
+}
+public interface petbear{
+     void perbear();
+}
+
+public class bearttaker implements bathbear , feedbear{
+     public void bathbear(){
+
+     }
+     public void feedbear(){
+
+     }
+}
+
+
+dependency inversion :
+
+process of decoupling of modules , this way, instead of high coupling modules depending on low coulping modules , both will depend on abstractions 
+
+interface Keyboard {
+}
+class MechanicalKeyboard implements Keyboard {
+}
+class Computer {
+    Keyboard keyboard;
+
+    Computer(Keyboard keyboard) {
+        this.keyboard = keyboard;
+    }
+}
+
+Now any keyboard can be used.
+
+
+
+
+
