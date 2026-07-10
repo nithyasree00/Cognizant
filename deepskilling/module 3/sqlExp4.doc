@@ -1,0 +1,135 @@
+```sql
+CREATE TABLE Departments (
+    DepartmentID INT PRIMARY KEY,
+    DepartmentName VARCHAR(100)
+);
+
+CREATE TABLE Employees (
+    EmployeeID INT PRIMARY KEY,
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    DepartmentID INT,
+    Salary DECIMAL(10,2),
+    JoinDate DATE,
+    FOREIGN KEY (DepartmentID) REFERENCES Departments(DepartmentID)
+);
+
+INSERT INTO Departments VALUES
+(1,'HR'),
+(2,'IT'),
+(3,'Finance');
+
+INSERT INTO Employees VALUES
+(1,'John','Doe',1,5000.00,'2020-01-15'),
+(2,'Jane','Smith',2,6000.00,'2019-03-22'),
+(3,'Bob','Johnson',3,5500.00,'2021-07-01');
+
+CREATE FUNCTION fn_CalculateAnnualSalary
+(
+    @Salary DECIMAL(10,2)
+)
+RETURNS DECIMAL(10,2)
+AS
+BEGIN
+    RETURN @Salary * 12;
+END;
+
+SELECT EmployeeID, FirstName, dbo.fn_CalculateAnnualSalary(Salary) AS AnnualSalary
+FROM Employees;
+
+CREATE FUNCTION fn_GetEmployeesByDepartment
+(
+    @DepartmentID INT
+)
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT *
+    FROM Employees
+    WHERE DepartmentID = @DepartmentID
+);
+
+SELECT * FROM dbo.fn_GetEmployeesByDepartment(2);
+
+CREATE FUNCTION fn_CalculateBonus
+(
+    @Salary DECIMAL(10,2)
+)
+RETURNS DECIMAL(10,2)
+AS
+BEGIN
+    RETURN @Salary * 0.10;
+END;
+
+SELECT EmployeeID, FirstName, dbo.fn_CalculateBonus(Salary) AS Bonus
+FROM Employees;
+
+ALTER FUNCTION fn_CalculateBonus
+(
+    @Salary DECIMAL(10,2)
+)
+RETURNS DECIMAL(10,2)
+AS
+BEGIN
+    RETURN @Salary * 0.15;
+END;
+
+SELECT EmployeeID, FirstName, dbo.fn_CalculateBonus(Salary) AS Bonus
+FROM Employees;
+
+DROP FUNCTION fn_CalculateBonus;
+
+SELECT EmployeeID,
+       FirstName,
+       dbo.fn_CalculateAnnualSalary(Salary) AS AnnualSalary
+FROM Employees;
+
+SELECT EmployeeID,
+       FirstName,
+       dbo.fn_CalculateAnnualSalary(Salary) AS AnnualSalary
+FROM Employees
+WHERE EmployeeID = 1;
+
+SELECT * FROM dbo.fn_GetEmployeesByDepartment(3);
+
+CREATE FUNCTION fn_CalculateBonus
+(
+    @Salary DECIMAL(10,2)
+)
+RETURNS DECIMAL(10,2)
+AS
+BEGIN
+    RETURN @Salary * 0.15;
+END;
+
+CREATE FUNCTION fn_CalculateTotalCompensation
+(
+    @Salary DECIMAL(10,2)
+)
+RETURNS DECIMAL(10,2)
+AS
+BEGIN
+    RETURN dbo.fn_CalculateAnnualSalary(@Salary) + dbo.fn_CalculateBonus(@Salary);
+END;
+
+SELECT EmployeeID,
+       FirstName,
+       dbo.fn_CalculateTotalCompensation(Salary) AS TotalCompensation
+FROM Employees;
+
+ALTER FUNCTION fn_CalculateTotalCompensation
+(
+    @Salary DECIMAL(10,2)
+)
+RETURNS DECIMAL(10,2)
+AS
+BEGIN
+    RETURN dbo.fn_CalculateAnnualSalary(@Salary) + dbo.fn_CalculateBonus(@Salary);
+END;
+
+SELECT EmployeeID,
+       FirstName,
+       dbo.fn_CalculateTotalCompensation(Salary) AS TotalCompensation
+FROM Employees;
+```
