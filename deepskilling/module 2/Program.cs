@@ -1,17 +1,29 @@
-﻿using System;
-class Program
+﻿using System.Net;
+using System.Net.Mail;
+
+namespace CustomerCommLib
 {
-    static void Main(string[] args)
+    public class MailSender : IMailSender
     {
-        Console.WriteLine("Enter yout 5 - letter guess");
-        String guess = Console.ReadLine();
-        guess = (guess ?? "").ToUpper();
-        Console.WriteLine("\n your guess");
-        foreach(char letter in guess)
+        public bool SendMail(string toAddress, string message)
         {
-            Console.WriteLine(letter);
+            MailMessage mail = new MailMessage();
+
+            SmtpClient smtpServer = new SmtpClient("smtp.gmail.com");
+
+            mail.From = new MailAddress("your_email@gmail.com");
+            mail.To.Add(toAddress);
+            mail.Subject = "Test Mail";
+            mail.Body = message;
+
+            smtpServer.Port = 587;
+            smtpServer.Credentials =
+                new NetworkCredential("username", "password");
+            smtpServer.EnableSsl = true;
+
+            smtpServer.Send(mail);
+
+            return true;
         }
-        Console.WriteLine();
     }
 }
-
